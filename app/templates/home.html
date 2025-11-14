@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocktail Quiz</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .title{
+        }
+
+        .bg-image {
+            background-image: url("{{ url_for('static', filename='background.png') }}");
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .content {
+            color: white;
+            max-width: 700px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 0.2em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            color: #f1c40f;
+        }
+
+        .intro {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            color: #ddd;
+        }
+
+        .btn-start {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            color: #f1c40f;
+            border: 2px solid #f1c40f;
+            background-color: rgba(0,0,0,0.5);
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-start:hover {
+            background-color: #f1c40f;
+            color: #000;
+            cursor: pointer;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="bg-image">
+        <div class="content">
+            <h1 class="title">{{data.titre}}</h1>
+
+            <p class="intro">
+              {{data.accroche}}
+            </p>
+            
+            <p class="description">
+              {{data.description}}
+            </p>
+
+            <a href="#" class="btn-start">
+              {{data.bouton}}
+            </a>
+        </div>
+    </div>
+  </body>
+</html>
