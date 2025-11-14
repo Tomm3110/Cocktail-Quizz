@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 5000
 
 # Étape 7 : Définir la commande de lancement
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["python", "run.py"]
