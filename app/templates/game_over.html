@@ -5,9 +5,20 @@
     <title>Fin de partie</title>
 </head>
 <body>
-    <h1>Temps écoulé !</h1>
-    <p>Votre score : {{ score }}</p>
-    <a href="{{ url_for('main.play') }}">Rejouer</a><br>
-    <a href="{{ url_for('main.home') }}">Retour à l'accueil</a>
+    <h1>Fin de partie</h1>
+
+    <p>Score final : {{ score }}</p>
+
+    <form method="post">
+        <label for="player_name">Entre ton pseudo :</label>
+        <input type="text" id="player_name" name="player_name" required>
+        <button type="submit">Enregistrer le score</button>
+    </form>
+
+    <p>
+        <a href="{{ url_for('main.scores') }}">Voir le tableau des scores</a><br>
+        <a href="{{ url_for('main.play') }}">Rejouer</a><br>
+        <a href="{{ url_for('main.home') }}">Retour à l'accueil</a>
+    </p>
 </body>
 </html>
