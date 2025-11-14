@@ -1,34 +1,56 @@
 <!doctype html>
-<html lang="fr">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>Partie en cours</title>
+    <title>Devine le cocktail !</title>
 </head>
 <body>
-    <h1>Partie en cours</h1>
 
-    <p>Temps restant : <span id="timer" data-remaining="{{ remaining_time }}"></span></p>
+<h1>Devine le cocktail</h1>
 
+<p>Temps restant :
+    <span id="timer" data-remaining="{{ remaining_time }}"></span>
+</p>
 
-    <script>
-        const timerElement = document.getElementById("timer");
-        let remaining = parseInt(timerElement.dataset.remaining, 10);
+<p>Score : {{ score }}</p>
 
-        function updateTimer() {
-            const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
-            const seconds = String(remaining % 60).padStart(2, '0');
-            timerElement.textContent = minutes + ":" + seconds;
+<!-- Affichage de l'image du cocktail -->
+<img src="{{ cocktail_image }}" alt="Cocktail" width="300">
 
-            if (remaining <= 0) {
-                window.location.href = "{{ url_for('main.game_over') }}";
-                return;
-            }
+{% if message %}
+<p style="color:red;">{{ message }}</p>
+{% endif %}
 
-            remaining -= 1;
-            setTimeout(updateTimer, 1000);
+<form method="post">
+    <input type="text" name="guess" placeholder="Nom ou ingrédient..." required>
+    <button type="submit">Valider</button>
+</form>
+
+<h2>ingrédients : </h2>
+{% for ingredient in ingredients %}
+    {{ingredient}}<br>
+{% endfor %}
+
+<script>
+    const timerElement = document.getElementById("timer");
+    let remaining = parseInt(timerElement.dataset.remaining, 10);
+
+    function updateTimer() {
+        const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
+        const seconds = String(remaining % 60).padStart(2, '0');
+        timerElement.textContent = minutes + ":" + seconds;
+
+        if (remaining <= 0) {
+            window.location.href = "{{ url_for('main.game_over') }}";
+            return;
         }
 
-        updateTimer();
-    </script>
+        remaining -= 1;
+        setTimeout(updateTimer, 1000);
+    }
+
+    updateTimer();
+</script>
+
 </body>
 </html>
