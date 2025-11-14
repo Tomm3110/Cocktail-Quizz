@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Tableau des scores</title>
+</head>
+<body>
+    <h1>Tableau des scores</h1>
+
+    {% if scores %}
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Position</th>
+                <th>Pseudo</th>
+                <th>Score</th>
+                <th>Date</th>
+            </tr>
+            {% for s in scores %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s["player_name"] }}</td>
+                <td>{{ s["score"] }}</td>
+                <td>{{ s["created_at"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Aucun score enregistré pour l’instant.</p>
+    {% endif %}
+
+    <p>
+        <a href="{{ url_for('main.home') }}">Retour à l'accueil</a>
+    </p>
+</body>
+</html>
