@@ -41,7 +41,7 @@
         timerElement.textContent = minutes + ":" + seconds;
 
         if (remaining <= 0) {
-            window.location.href = "{{ url_for('main.game_over') }}";
+            window.location.href = "{{ url_for('game_over') }}";
             return;
         }
 

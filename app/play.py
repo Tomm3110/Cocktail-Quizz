@@ -1,6 +1,6 @@
 from flask import redirect, url_for, render_template, request, session
-from app.timer import start_timer, get_remaining_time, is_time_over
-from app.api_cocktails import get_random_cocktail
+from timer import start_timer, get_remaining_time, is_time_over
+from api_cocktails import get_random_cocktail
 
 class Play :
 	def play():
@@ -19,7 +19,7 @@ class Play :
 		# Temps restant
 		remaining_time = get_remaining_time()
 		if remaining_time <= 0:
-			return redirect(url_for('main.game_over'))
+			return redirect(url_for('game_over'))
 
 		message = None
 		current_score = session.get('score', 100)
@@ -36,7 +36,7 @@ class Play :
 			correct = (guess == cocktail_name) or (guess in ingredients)
 
 			if correct:
-				return redirect(url_for('main.game_over'))
+				return redirect(url_for('game_over'))
 			else:
 				current_score = max(0, current_score - 1)
 				session['score'] = current_score
