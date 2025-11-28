@@ -1,56 +1,239 @@
 <!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Devine le cocktail !</title>
-</head>
-<body>
-
-<h1>Devine le cocktail</h1>
-
-<p>Temps restant :
-    <span id="timer" data-remaining="{{ remaining_time }}"></span>
-</p>
-
-<p>Score : {{ score }}</p>
-
-<!-- Affichage de l'image du cocktail -->
-<img src="{{ cocktail_image }}" alt="Cocktail" width="300">
-
-{% if message %}
-<p style="color:red;">{{ message }}</p>
-{% endif %}
-
-<form method="post">
-    <input type="text" name="guess" placeholder="Nom ou ingrédient..." required autofocus>
-    <button type="submit">Valider</button>
-</form>
-
-<h2>ingrédients : </h2>
-{% for ingredient in ingredients %}
-    {{ingredient}}<br>
-{% endfor %}
-
-<script>
-    const timerElement = document.getElementById("timer");
-    let remaining = parseInt(timerElement.dataset.remaining, 10);
-
-    function updateTimer() {
-        const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
-        const seconds = String(remaining % 60).padStart(2, '0');
-        timerElement.textContent = minutes + ":" + seconds;
-
-        if (remaining <= 0) {
-            window.location.href = "{{ url_for('game_over') }}";
-            return;
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu - Devine le Cocktail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #212529; /* Fallback color */
         }
 
-        remaining -= 1;
-        setTimeout(updateTimer, 1000);
-    }
+        /* Réutilisation du fond d'écran */
+        .bg-image {
+            background-image: url("{{ url_for('static', filename='background.png') }}");
+            min-height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+        }
 
-    updateTimer();
-</script>
+        /* Conteneur principal centré */
+        .game-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-top: 60px; /* Espace pour la navbar */
+            margin-bottom: 60px; /* Espace pour le footer */
+        }
 
-</body>
+        /* Carte de jeu semi-transparente */
+        .game-card {
+            background-color: rgba(0, 0, 0, 0.85); /* Fond noir transparent */
+            border: 1px solid #444;
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            font-weight: 700;
+            color: #f1c40f;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* Style de l'image du cocktail */
+        .cocktail-img {
+            border: 4px solid #f1c40f;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            max-height: 350px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        /* Timer et Score */
+        .stats-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .timer-text { color: #f1c40f; }
+        .score-text { color: #fff; }
+
+        /* Input et Bouton */
+        .form-control-lg {
+            border-radius: 50px;
+            border: 2px solid #555;
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+        
+        .form-control-lg:focus {
+            background-color: #444;
+            color: white;
+            border-color: #f1c40f;
+            box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
+
+        .btn-submit {
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            color: #000;
+            background-color: #f1c40f;
+            border: 2px solid #f1c40f;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn-submit:hover {
+            background-color: #d4ac0d;
+            border-color: #d4ac0d;
+            transform: scale(1.02);
+        }
+
+        /* Liste des ingrédients (Debug/Indice) */
+        .ingredients-list {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 20px;
+            text-align: left;
+            border-top: 1px solid #444;
+            padding-top: 10px;
+        }
+    </style>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg bg-dark py-3 fixed-top" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand fs-3 fw-bold me-5 order-lg-last ms-auto text-warning" href="#">Les 3 tacos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse order-lg-first" id="navbarNav">
+          <div class="navbar-nav fs-5">
+            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            <a class="nav-link active" href="#">Jeu en cours</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="bg-image">
+        <div class="game-container">
+            <div class="game-card">
+                <div class="row align-items-center">
+                    
+                    <div class="col-md-5 text-center mb-4 mb-md-0">
+                        <img src="{{ cocktail_image }}" alt="Cocktail à deviner" class="cocktail-img img-fluid">
+                    </div>
+
+                    <div class="col-md-7">
+                        <h1 class="text-center text-md-start">Devine le cocktail</h1>
+
+                        <div class="stats-box">
+                            <div>
+                                ⏳ <span id="timer" class="timer-text" data-remaining="{{ remaining_time }}">--:--</span>
+                            </div>
+                            <div class="score-text">
+                                Score : {{ score }} 🏆
+                            </div>
+                        </div>
+
+                        {% if message %}
+                        <div class="alert alert-danger text-center py-2" role="alert">
+                            {{ message }}
+                        </div>
+                        {% endif %}
+
+                        <form method="post" autocomplete="off">
+                            <div class="mb-3">
+                                <input type="text" name="guess" class="form-control form-control-lg" placeholder="Nom du cocktail..." required autofocus>
+                            </div>
+                            <button type="submit" class="btn-submit">Valider</button>
+                        </form>
+
+                        {% if ingredients %}
+                        <div class="ingredients-list">
+                            <strong>Indices (Ingrédients) :</strong><br>
+                            {% for ingredient in ingredients %}
+                                <span class="badge text-bg-secondary me-1">{{ ingredient }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="fixed-bottom bg-dark text-light text-center py-2" style="font-size: 0.8rem; opacity: 0.9;">
+      <div class="container">
+          <p class="m-0">
+              🍷 L'abus d'alcool est dangereux pour la santé, à consommer avec modération.
+          </p>
+      </div>
+    </footer>
+
+    <script>
+        const timerElement = document.getElementById("timer");
+        let remaining = parseInt(timerElement.dataset.remaining, 10);
+
+        function updateTimer() {
+            // Calcul des minutes et secondes
+            const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
+            const seconds = String(remaining % 60).padStart(2, '0');
+            
+            // Affichage
+            timerElement.textContent = minutes + ":" + seconds;
+
+            // Changement de couleur si le temps presse (moins de 10s)
+            if (remaining < 10) {
+                timerElement.style.color = "#e74c3c"; // Rouge
+            }
+
+            // Fin du temps
+            if (remaining <= 0) {
+                // Redirection Flask via JS
+                window.location.href = "{{ url_for('game_over') }}";
+                return;
+            }
+
+            remaining -= 1;
+            setTimeout(updateTimer, 1000);
+        }
+
+        // Lancement immédiat
+        updateTimer();
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
