@@ -22,8 +22,11 @@ class Play :
 			session['cocktail_image'] = cocktail["image"]
 			session['ingredients'] = cocktail["ingredients"]
 
+			session['hints_revealed'] = 0
+
 		message = None
 		current_score = session.get('score', 100)
+		hints_count = session.get('hints_revealed', 0)
 
 		# Données du cocktail
 		cocktail_name = session['cocktail_name'].lower()
@@ -33,7 +36,7 @@ class Play :
 		if request.method == 'POST':
 			guess = request.form.get('guess', '').strip().lower()
 
-			if guess == cocktail_name or guess in ingredients:
+			if guess == cocktail_name:
 				session['score'] = current_score + 10 
 
 				session.pop('cocktail_name', None)
@@ -43,12 +46,17 @@ class Play :
 				return redirect(url_for('play'))
 			
 			elif guess in ingredients:
-				message = "C'est un ingrédient, mais je veux le nom du cocktail !"
+				message = "C'est un ingrédient, il faut le nom du cocktail !"
             
 			else:
 				current_score = max(0, current_score - 1)
 				session['score'] = current_score
 				message = "Mauvaise réponse ! -1 point"
+				session['hints_revealed'] = hints_count + 1
+		
+		original_ingredients = session['ingredients']
+		current_hints_count = session.get('hints_revealed', 0)
+		visible_ingredients = original_ingredients[:current_hints_count]
 
 
 		return render_template(
@@ -57,5 +65,5 @@ class Play :
 			score=current_score,
 			message=message,
 			cocktail_image=session['cocktail_image'], 
-			ingredients = ingredients
+			ingredients=visible_ingredients
 		)
