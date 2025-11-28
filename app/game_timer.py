@@ -17,3 +17,6 @@ def get_remaining_time():
 
 def is_time_over():
     return get_remaining_time() <= 0
+
+def reset_timer() :
+    session.pop("start_time", None)
