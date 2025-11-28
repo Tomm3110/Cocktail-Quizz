@@ -1,5 +1,5 @@
 from flask import redirect, url_for, render_template, request, session
-from timer import start_timer, get_remaining_time, is_time_over
+from game_timer import start_timer, get_remaining_time, is_time_over
 from api_cocktails import get_random_cocktail
 
 class Play :

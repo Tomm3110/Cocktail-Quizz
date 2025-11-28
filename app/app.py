@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, render_template, redirect, url_for, request, session
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
-from timer import start_timer, get_remaining_time, is_time_over
+from game_timer import start_timer, get_remaining_time, is_time_over
 from database import get_connection
 from api_cocktails import get_random_cocktail
 from play import Play
