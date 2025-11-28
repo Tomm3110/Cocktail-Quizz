@@ -2,12 +2,14 @@ from flask import Flask, Blueprint, render_template, redirect, url_for, request,
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from game_timer import start_timer, get_remaining_time, is_time_over
-from database import get_connection
+from database import get_connection, init_db
 from api_cocktails import get_random_cocktail
 from play import Play
 import sqlite3
 
 app = Flask(__name__)
+
+init_db()
 
 con = sqlite3.connect('cocktail.db', check_same_thread=False)
 cur = con.cursor()
@@ -24,15 +26,11 @@ def home():
     }
     return render_template('home.html', data=content)
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
 @app.route('/play', methods=['GET', 'POST'])
 def play() :
     return Play.play()
 
-@app.route('/game_over')
+@app.route('/game_over', methods=['GET', 'POST'])
 def game_over():
     score = session.get('score', 0)
 
@@ -42,7 +40,7 @@ def game_over():
         if player_name:
             conn = get_connection()
             conn.execute(
-                "INSERT INTO scores (player_name, score) VALUES (?, ?)",
+                "INSERT INTO scores (pseudo, score) VALUES (?, ?)",
                 (player_name, score)
             )
             conn.commit()
@@ -61,11 +59,12 @@ def game_over():
 def scores():
     conn = get_connection()
     cur = conn.execute(
-        "SELECT player_name, score, created_at "
-        "FROM scores "
-        "ORDER BY score DESC, created_at ASC"
+        "SELECT pseudo, score FROM scores ORDER BY score DESC"
     )
     scores = cur.fetchall()
     conn.close()
 
     return render_template('scores.html', scores=scores)
+
+if __name__ == '__main__':
+    app.run(debug=True)
