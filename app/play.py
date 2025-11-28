@@ -10,37 +10,46 @@ class Play :
 			start_timer()
 			session['score'] = 100
 
-			# Charger un cocktail aléatoire depuis l'API
+		# Temps restant
+		remaining_time = get_remaining_time()
+		if remaining_time <= 0:
+			return redirect(url_for('game_over'))
+		
+		# Charger un cocktail aléatoire depuis l'API
+		if 'cocktail_name' not in session:
 			cocktail = get_random_cocktail()
 			session['cocktail_name'] = cocktail["name"]
 			session['cocktail_image'] = cocktail["image"]
 			session['ingredients'] = cocktail["ingredients"]
 
-		# Temps restant
-		remaining_time = get_remaining_time()
-		if remaining_time <= 0:
-			return redirect(url_for('game_over'))
-
 		message = None
 		current_score = session.get('score', 100)
+
+		# Données du cocktail
+		cocktail_name = session['cocktail_name'].lower()
+		ingredients = [i.lower() for i in session['ingredients']]
 
 		# Gestion du formulaire
 		if request.method == 'POST':
 			guess = request.form.get('guess', '').strip().lower()
 
-			# Données du cocktail
-			cocktail_name = session['cocktail_name'].lower()
-			ingredients = [i.lower() for i in session['ingredients']]
+			if guess == cocktail_name or guess in ingredients:
+				session['score'] = current_score + 10 
 
-			# Condition de réussite
-			correct = (guess == cocktail_name) or (guess in ingredients)
-
-			if correct:
-				return redirect(url_for('game_over'))
+				session.pop('cocktail_name', None)
+				session.pop('ingredients', None)
+				session.pop('cocktail_image', None)
+                
+				return redirect(url_for('play'))
+			
+			elif guess in ingredients:
+				message = "C'est un ingrédient, mais je veux le nom du cocktail !"
+            
 			else:
 				current_score = max(0, current_score - 1)
 				session['score'] = current_score
 				message = "Mauvaise réponse ! -1 point"
+
 
 		return render_template(
 			'play.html',
@@ -48,5 +57,5 @@ class Play :
 			score=current_score,
 			message=message,
 			cocktail_image=session['cocktail_image'], 
-			ingredients = ingredients # debug
+			ingredients = ingredients
 		)
