@@ -11,17 +11,14 @@
         <table border="1" cellpadding="5">
             <tr>
                 <th>Position</th>
-                <th>Pseudo</th>
-                <th>Score</th>
-                <th>Date</th>
-            </tr>
+                <th>Pseudo</th> <th>Score</th>
+                </tr>
             {% for s in scores %}
             <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ s["player_name"] }}</td>
+                <td>{{ s["pseudo"] }}</td>
                 <td>{{ s["score"] }}</td>
-                <td>{{ s["created_at"] }}</td>
-            </tr>
+                </tr>
             {% endfor %}
         </table>
     {% else %}
