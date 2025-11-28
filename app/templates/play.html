@@ -26,6 +26,11 @@
     <button type="submit">Valider</button>
 </form>
 
+<h2>ingrédients : </h2>
+{% for ingredient in ingredients %}
+    {{ingredient}}<br>
+{% endfor %}
+
 <script>
     const timerElement = document.getElementById("timer");
     let remaining = parseInt(timerElement.dataset.remaining, 10);
