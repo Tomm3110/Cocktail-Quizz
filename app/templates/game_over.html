@@ -1,28 +1,203 @@
 <!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <title>Fin de partie</title>
-</head>
-<body>
-  <h1>Fin de partie</h1>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fin de Partie - Cocktail Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #212529;
+        }
 
-  <p>Score final : {{ score }}</p>
+        .bg-image {
+            background-image: url("{{ url_for('static', filename='background.png') }}");
+            min-height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+        }
 
-  {% if error %}
-    <p style="color: red;">{{ error }}</p>
-  {% endif %}
+        .game-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
 
-  <form method="post" action="{{ url_for('game_over') }}">
-    <label for="player_name">Entre ton pseudo :</label>
-    <input type="text" id="player_name" name="player_name" maxlength="32" required>
-    <button type="submit">Enregistrer le score</button>
-  </form>
+        .game-card {
+            background-color: rgba(0, 0, 0, 0.9); /* Un peu plus sombre pour la fin */
+            border: 1px solid #f1c40f; /* Bordure jaune pour marquer le coup */
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+            max-width: 600px; /* Plus étroit que le jeu */
+            width: 100%;
+            text-align: center;
+        }
 
-  <p>
-    <a href="{{ url_for('scores') }}">Voir le tableau des scores</a><br>
-    <a href="{{ url_for('play') }}">Rejouer</a><br>
-    <a href="{{ url_for('home') }}">Retour à l'accueil</a>
-  </p>
-</body>
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #f1c40f;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .score-display {
+            font-size: 5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            margin: 20px 0;
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        /* Formulaire */
+        .form-control-lg {
+            border-radius: 50px;
+            border: 2px solid #555;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .form-control-lg:focus {
+            background-color: #444;
+            color: white;
+            border-color: #f1c40f;
+            box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
+
+        /* Bouton Enregistrer (Principal) */
+        .btn-save {
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            color: #000;
+            background-color: #f1c40f;
+            border: 2px solid #f1c40f;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .btn-save:hover {
+            background-color: #d4ac0d;
+            border-color: #d4ac0d;
+            transform: scale(1.05);
+        }
+
+        /* Liens secondaires */
+        .secondary-actions {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-link-custom {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .btn-link-custom:hover {
+            color: #f1c40f;
+        }
+        
+        .btn-outline-custom {
+            color: white;
+            border: 1px solid #555;
+            border-radius: 50px;
+            padding: 8px 20px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-outline-custom:hover {
+            background-color: #333;
+            border-color: white;
+        }
+
+    </style>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg bg-dark py-3 fixed-top" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand fs-3 fw-bold me-5 order-lg-last ms-auto text-warning" href="#">Les 3 tacos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse order-lg-first" id="navbarNav">
+          <div class="navbar-nav fs-5">
+            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="bg-image">
+        <div class="game-container">
+            <div class="game-card">
+                
+                <h1>Fin de partie</h1>
+                
+                <div class="score-label">Ton score final</div>
+                <div class="score-display">{{ score }}</div>
+
+                <form method="post" autocomplete="off">
+                    <div class="mb-3">
+                        <label for="player_name" class="form-label visually-hidden">Pseudo</label>
+                        <input type="text" id="player_name" name="player_name" class="form-control form-control-lg" placeholder="Entre ton pseudo" required autofocus>
+                    </div>
+                    <button type="submit" class="btn-save">Enregistrer le score</button>
+                </form>
+
+                <div class="secondary-actions">
+                    <div>
+                        <a href="{{ url_for('play') }}" class="btn-outline-custom mb-2">🔄 Rejouer tout de suite</a>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('scores') }}" class="btn-link-custom">Voir le tableau des scores</a>
+                         &nbsp;|&nbsp; 
+                        <a href="{{ url_for('home') }}" class="btn-link-custom">Retour à l'accueil</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="fixed-bottom bg-dark text-light text-center py-2" style="font-size: 0.8rem; opacity: 0.9;">
+      <div class="container">
+          <p class="m-0">
+              🍷 L'abus d'alcool est dangereux pour la santé, à consommer avec modération.
+          </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>

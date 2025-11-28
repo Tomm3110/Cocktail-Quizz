@@ -1,32 +1,194 @@
 <!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <title>Tableau des scores</title>
-</head>
-<body>
-    <h1>Tableau des scores</h1>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau des Scores - Cocktail Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #212529;
+        }
 
-    {% if scores %}
-        <table border="1" cellpadding="5">
-            <tr>
-                <th>Position</th>
-                <th>Pseudo</th> <th>Score</th>
-                </tr>
-            {% for s in scores %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ s["pseudo"] }}</td>
-                <td>{{ s["score"] }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>Aucun score enregistré pour l’instant.</p>
-    {% endif %}
+        .bg-image {
+            background-image: url("{{ url_for('static', filename='background.png') }}");
+            min-height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+        }
 
-    <p>
-        <a href="{{ url_for('home') }}">Retour à l'accueil</a>
-    </p>
-</body>
+        .game-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+
+        .game-card {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid #444;
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            max-width: 800px; /* Un peu plus large pour le tableau */
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f1c40f;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        /* Style du tableau personnalisé */
+        .table-custom {
+            --bs-table-bg: transparent;
+            --bs-table-color: #eee;
+            --bs-table-border-color: #444;
+            margin-bottom: 0;
+        }
+
+        .table-custom thead th {
+            color: #f1c40f;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #f1c40f;
+            padding-bottom: 15px;
+        }
+
+        .table-custom td {
+            padding: 15px 10px;
+            vertical-align: middle;
+            font-size: 1.1rem;
+        }
+
+        /* Highlight des rangs */
+        .rank-1 { color: #FFD700; font-size: 1.5rem; } /* Or */
+        .rank-2 { color: #C0C0C0; font-size: 1.5rem; } /* Argent */
+        .rank-3 { color: #CD7F32; font-size: 1.5rem; } /* Bronze */
+        .rank-other { color: #777; font-weight: bold; }
+
+        /* Boutons du bas */
+        .btn-home {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 30px;
+            border: 2px solid #f1c40f;
+            color: #f1c40f;
+            border-radius: 50px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-home:hover {
+            background-color: #f1c40f;
+            color: black;
+        }
+
+        .empty-message {
+            color: #aaa;
+            font-style: italic;
+            margin: 20px 0;
+        }
+    </style>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg bg-dark py-3 fixed-top" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand fs-3 fw-bold me-5 order-lg-last ms-auto text-warning" href="#">Les 3 tacos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse order-lg-first" id="navbarNav">
+          <div class="navbar-nav fs-5">
+            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            <a class="nav-link" href="{{ url_for('play') }}">Jouer</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="bg-image">
+        <div class="game-container">
+            <div class="game-card">
+                
+                <h1>🏆 Tableau des scores</h1>
+
+                {% if scores %}
+                <div class="table-responsive">
+                    <table class="table table-custom table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 15%;">Pos</th>
+                                <th scope="col" style="width: 55%; text-align: left;">Pseudo</th>
+                                <th scope="col" style="width: 30%;">Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in scores %}
+                            <tr>
+                                <td>
+                                    {% if loop.index == 1 %}
+                                        <span class="rank-1">🥇</span>
+                                    {% elif loop.index == 2 %}
+                                        <span class="rank-2">🥈</span>
+                                    {% elif loop.index == 3 %}
+                                        <span class="rank-3">🥉</span>
+                                    {% else %}
+                                        <span class="rank-other">{{ loop.index }}</span>
+                                    {% endif %}
+                                </td>
+                                
+                                <td class="text-start fw-bold text-white">
+                                    {{ s["pseudo"] }}
+                                </td>
+                                
+                                <td class="fw-bold text-warning">
+                                    {{ s["score"] }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                    <p class="empty-message">Aucun score enregistré pour l’instant. Sois le premier !</p>
+                {% endif %}
+
+                <a href="{{ url_for('home') }}" class="btn-home">
+                    Retour à l'accueil
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="fixed-bottom bg-dark text-light text-center py-2" style="font-size: 0.8rem; opacity: 0.9;">
+      <div class="container">
+          <p class="m-0">
+              🍷 L'abus d'alcool est dangereux pour la santé, à consommer avec modération.
+          </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
