@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 .venv
-=======
 app/__pycache__
 .idea/
->>>>>>> dev
+__pycache__
+app/scores.db

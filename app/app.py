@@ -30,6 +30,15 @@ def home():
 def play() :
     return Play.play()
 
+
+@app.route('/ff')
+def ff() :
+    reset_timer()
+    session.pop("score", None)
+    session.pop("cocktail_name", None)
+    return redirect(url_for('home'))
+
+
 @app.route('/game_over', methods=['GET', 'POST'])
 def game_over():
     score = session.get('score', 0)
@@ -65,6 +74,7 @@ def scores():
     conn.close()
 
     return render_template('scores.html', scores=scores)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
