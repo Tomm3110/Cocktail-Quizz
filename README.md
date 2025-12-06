@@ -1,9 +1,9 @@
 # 🍹 Flask Cocktail Guesser
 
-> Projet réalisé dans le cadre du cours de Frameworks Web (Flask).
+> Projet réalisé dans le cadre du cours Management des Systèmes d'Informations.
 
-![Python](https://img.shields.io/badge/Python-3.x-blue?style=flat-square&logo=python)
-![Flask](https://img.shields.io/badge/Flask-2.x-lightgrey?style=flat-square&logo=flask)
+![Python](https://img.shields.io/badge/Python-3.12.3-blue?style=flat-square&logo=python)
+![Flask](https://img.shields.io/badge/Flask-3.1.2-lightgrey?style=flat-square&logo=flask)
 ![Code Quality](https://img.shields.io/badge/Quality-SonarQube%20%2B%20Pylint-success?style=flat-square)
 
 ## 📖 Description
