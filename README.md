@@ -21,12 +21,12 @@ Nous avons validé les fonctionnalités suivantes pour offrir une expérience ut
 * **Jeu Principal** : Devinez le cocktail ou les ingrédients d'un cocktail affiché aléatoirement.
 * **Cocktail Multiple** : Possibilité d'enchaîner plusieurs listes d'ingrédients à deviner.
 * **Timer** : Un compte à rebours pour faire le plus gros score possible.
-* **Saisie** : À la fin de la partie, saisissez votre pseudo via une interface pour enregistrer votre score.
+* **choix pseudo** : À la fin de la partie, saisissez votre pseudo via une interface pour enregistrer votre score.
 * **Tableau des Scores** : Consultez les meilleurs scores directement sur le site.
 * **Message de Prévention** : Un rappel important sur la consommation responsable d'alcool affiché sur l'interface.
 
 ###  Design
-* **Framework CSS** : Utilisation d'un framework (Bootstrap) pour un design responsive et propre.
+* **Style** : Utilisation d'un framework (Bootstrap) pour un design responsive et propre.
 
 ###  Qualité
 * **SonarQube** : Analyse du code connectée pour assurer la maintenabilité et la sécurité.
@@ -39,9 +39,9 @@ Nous avons validé les fonctionnalités suivantes pour offrir une expérience ut
 
 ##  L'Équipe
 
-* **[Tom FIRMIN]** -
+* **[Tom FIRMIN]**
 * **[Tom BILLET]** - *[Scrum Master]*
-* **[Killian HAVEZ]** -
+* **[Killian HAVEZ]**
 
 
 ---
