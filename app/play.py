@@ -36,7 +36,7 @@ class Play :
 		if request.method == 'POST':
 			guess = request.form.get('guess', '').strip().lower()
 
-			if guess == cocktail_name:
+			if (len(guess) >= 3) and (guess in cocktail_name):
 				session['score'] = current_score + 10 
 
 				session.pop('cocktail_name', None)
