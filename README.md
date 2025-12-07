@@ -28,10 +28,6 @@ Nous avons validé les fonctionnalités suivantes pour offrir une expérience ut
 ###  Design
 * **Style** : Utilisation d'un framework (Bootstrap) pour un design responsive et propre.
 
-###  Qualité
-* **SonarQube** : Analyse du code connectée pour assurer la maintenabilité et la sécurité.
-* **Pylint** : Respect des standards PEP8 et nettoyage du code.
-
 ###  Bonus Spécial
 * **Hydratation Prof** : ✅ Bouteille d'eau fournie au professeur pour sa survie durant les 4h30 de cours.
 
