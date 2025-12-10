@@ -16,7 +16,6 @@
             font-family: 'Press Start 2P', cursive;
             background-color: #1a1a1a;
             color: white;
-            /* On change hidden en auto pour permettre de scroller si l'écran est vraiment trop petit (mobile) */
             overflow-y: auto;
         }
 
@@ -26,15 +25,15 @@
 
         .bg-image {
             background-image: url("{{ url_for('static', filename='background.png') }}");
-            min-height: 100%; /* Change height en min-height */
+            min-height: 100%; 
             background-repeat: no-repeat;
             background-size: cover;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            padding-top: 60px; /* Espace pour ne pas être caché par la navbar */
-            padding-bottom: 60px; /* Espace pour le footer */
+            padding-top: 60px; 
+            padding-bottom: 60px;
         }
 
         .bg-overlay {
@@ -46,7 +45,6 @@
 
         .overlay-content {
             background-color: rgba(0, 0, 0, 0.85);
-            /* RÉDUCTION DU PADDING (c'était 40px) */
             padding: 20px 30px;
             border-radius: 20px;
             border: 4px solid #f1c40f;
@@ -61,7 +59,7 @@
         h1 {
             color: #e74c3c;
             font-size: 2rem;
-            margin-bottom: 10px; /* Réduit (c'était 20px) */
+            margin-bottom: 10px;
             text-shadow: 4px 4px 0 #000;
             line-height: 1.5;
         }
@@ -71,17 +69,16 @@
         }
 
         .score-display {
-            font-size: 1.2rem; /* Un peu plus petit */
+            font-size: 1.2rem; 
             color: #f1c40f;
-            margin-bottom: 20px; /* Réduit (c'était 40px) */
+            margin-bottom: 20px; 
         }
 
-        /* --- STYLE DU SÉLECTEUR ARCADE --- */
         .arcade-input-container {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 25px; /* Réduit (c'était 40px) */
+            margin-bottom: 25px; 
         }
 
         .letter-slot {
@@ -90,13 +87,12 @@
             align-items: center;
         }
 
-        /* RÉDUCTION DE LA TAILLE DES LETTRES */
         .letter-display {
-            font-size: 2rem; /* Plus petit */
+            font-size: 2rem; 
             background-color: #000;
             color: #fff;
-            width: 60px;  /* Plus petit */
-            height: 80px; /* Plus petit */
+            width: 60px; 
+            height: 80px; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -112,7 +108,7 @@
             font-size: 1.2rem;
             cursor: pointer;
             transition: transform 0.1s;
-            padding: 0; /* Enlève le padding par défaut */
+            padding: 0; 
         }
 
         .arrow-btn:hover { color: #fff; transform: scale(1.2); }
@@ -129,7 +125,7 @@
             text-transform: uppercase;
             box-shadow: 4px 4px 0 #fff;
             transition: all 0.2s;
-            margin-bottom: 10px; /* Petite marge en bas pour ne pas coller au bord */
+            margin-bottom: 10px
         }
 
         .btn-save:hover {

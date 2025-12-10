@@ -42,7 +42,7 @@ def ff() :
 @app.route('/game_over', methods=['GET', 'POST'])
 def game_over():
     score = session.get('score', 0)
-    reset_timer();
+    reset_timer()
 
     if request.method == 'POST':
         player_name = request.form.get('player_name', '').strip()
@@ -74,6 +74,14 @@ def scores():
     conn.close()
 
     return render_template('scores.html', scores=scores)
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
 
 if __name__ == '__main__':

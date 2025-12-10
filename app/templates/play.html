@@ -11,10 +11,9 @@
             height: 100%;
             margin: 0;
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #212529; /* Fallback color */
+            background-color: #212529; 
         }
 
-        /* Réutilisation du fond d'écran */
         .bg-image {
             background-image: url("{{ url_for('static', filename='background.png') }}");
             min-height: 100%;
@@ -25,20 +24,19 @@
             flex-direction: column;
         }
 
-        /* Conteneur principal centré */
         .game-container {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            margin-top: 60px; /* Espace pour la navbar */
-            margin-bottom: 60px; /* Espace pour le footer */
+            margin-top: 60px; 
+            margin-bottom: 60px; 
         }
 
         /* Carte de jeu semi-transparente */
         .game-card {
-            background-color: rgba(0, 0, 0, 0.85); /* Fond noir transparent */
+            background-color: rgba(0, 0, 0, 0.85); 
             border: 1px solid #444;
             border-radius: 20px;
             padding: 30px;
@@ -56,7 +54,6 @@
             margin-bottom: 20px;
         }
 
-        /* Style de l'image du cocktail */
         .cocktail-img {
             border: 4px solid #f1c40f;
             border-radius: 15px;
@@ -66,7 +63,6 @@
             width: 100%;
         }
 
-        /* Timer et Score */
         .stats-box {
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -82,7 +78,6 @@
         .timer-text { color: #f1c40f; }
         .score-text { color: #fff; }
 
-        /* Input et Bouton */
         .form-control-lg {
             border-radius: 50px;
             border: 2px solid #555;
@@ -118,7 +113,6 @@
             transform: scale(1.02);
         }
 
-        /* Liste des ingrédients (Debug/Indice) */
         .ingredients-list {
             font-size: 0.9rem;
             color: #aaa;
