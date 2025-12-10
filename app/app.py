@@ -42,7 +42,7 @@ def ff() :
 @app.route('/game_over', methods=['GET', 'POST'])
 def game_over():
     score = session.get('score', 0)
-    reset_timer();
+    reset_timer()
 
     if request.method == 'POST':
         player_name = request.form.get('player_name', '').strip()
