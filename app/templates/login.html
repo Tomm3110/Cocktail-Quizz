@@ -25,25 +25,23 @@
             padding-bottom: 10%;
         }
 
-        /* --- C'EST ICI QUE J'AI RÉDUIT LA TAILLE --- */
         .content {
             color: white;
-            max-width: 400px; /* <--- Passé de 500px à 400px */
-            width: 90%;       /* S'adapte aux petits écrans */
+            max-width: 400px; 
+            width: 90%;     
             padding: 30px;
             text-align: center;
             margin-top: auto;
             margin-bottom: auto;
             padding-bottom: 100px;
             
-            /* Optionnel : ajout d'un fond léger pour mieux délimiter la zone réduite */
             background-color: rgba(0, 0, 0, 0.4); 
             border-radius: 20px;
-            backdrop-filter: blur(5px); /* Effet de flou derrière le cadre */
+            backdrop-filter: blur(5px); 
         }
 
         h1 {
-            font-size: 2.5em; /* Légèrement réduit pour aller avec le cadre */
+            font-size: 2.5em; 
             text-transform: uppercase;
             letter-spacing: 3px;
             font-weight: 700;
@@ -125,7 +123,7 @@
         <div class="collapse navbar-collapse order-lg-first" id="navbarNavAltMarkup">
           <div class="navbar-nav fs-4">
             <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-            <a class="nav-link active" aria-current="page" href="#">Sign in</a>
+            <a class="nav-link active" aria-current="page" href="#">Login</a>
           </div>
         </div>
       </div>
@@ -135,10 +133,16 @@
         <div class="content">
             <h1>Connexion</h1>
 
+            {% if error %}
+                <div style="color: red; font-weight: bold;">
+                    <strong>Erreur :</strong> {{ error }}
+                </div>
+            {% endif %}
+
             <form action="{{ url_for('login') }}" method="POST" class="login-form text-start">
                 
                 <div class="mb-3">
-                    <label for="email" class="form-label">Adresse Email</label>
+                    <label for="email" class="form-label"> Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="nom@exemple.com" required>
                 </div>
                 

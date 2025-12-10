@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, render_template, redirect, url_for, request, session
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
+from werkzeug.security import generate_password_hash, check_password_hash
 from game_timer import start_timer, get_remaining_time, is_time_over, reset_timer
 from database import get_connection, init_db
 from api_cocktails import get_random_cocktail
@@ -75,13 +76,52 @@ def scores():
 
     return render_template('scores.html', scores=scores)
 
-@app.route('/login')
+@app.route('/login',  methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    error = None
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        conn = get_connection()
+        user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        conn.close()
+        
+        if user and check_password_hash(user['password'], password):
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            return redirect(url_for('home')) 
+        else:
+            error = "Email ou mot de passe incorrect."            
+    return render_template('login.html', error=error)
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        
+        hashed_password = generate_password_hash(password)
+        
+        conn = get_connection()
+        try:
+            conn.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", (username, email, hashed_password))
+            conn.commit()
+        except sqlite3.IntegrityError:
+            conn.close()
+            return "Ce pseudo ou cet email est déjà utilisé !"
+            
+        conn.close()
+        return redirect(url_for('login'))
+        
     return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session.pop('user_id', None)
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
