@@ -24,7 +24,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS scores (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             pseudo TEXT NOT NULL,
-            score INTEGER NOT NULL
+            score INTEGER NOT NULL,
+            user_id INTEGER
         )
         """
     )

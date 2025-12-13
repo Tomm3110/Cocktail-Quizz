@@ -50,6 +50,26 @@
             text-align: center;
         }
 
+        .alert {
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            border: 1px solid transparent;
+        }
+
+        .alert-success {
+            color: #0f5132;          
+            background-color: #d1e7dd; 
+            border-color: #badbcc;  
+        }
+
+        .alert-error {
+            color: #842029;
+            background-color: #f8d7da;
+            border-color: #f5c2c7;
+        }
+
         .login-form .form-control {
             background-color: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -133,11 +153,17 @@
         <div class="content">
             <h1>Connexion</h1>
 
-            {% if error %}
-                <div style="color: red; font-weight: bold;">
-                    <strong>Erreur :</strong> {{ error }}
-                </div>
-            {% endif %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
 
             <form action="{{ url_for('login') }}" method="POST" class="login-form text-start">
                 
