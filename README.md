@@ -18,6 +18,7 @@ Nous avons validé les fonctionnalités suivantes pour offrir une expérience ut
 
 ###  Gameplay & Interface
 * **Page d'accueil** : Menu de navigation clair présentant le site.
+* **Login** : Système de compte avec connexion et sauvegarde de ses scores.
 * **Jeu Principal** : Devinez le cocktail ou les ingrédients d'un cocktail affiché aléatoirement.
 * **Cocktail Multiple** : Possibilité d'enchaîner plusieurs listes d'ingrédients à deviner.
 * **Timer** : Un compte à rebours pour faire le plus gros score possible.
