@@ -58,8 +58,12 @@ class Play :
 		
 		original_ingredients = session['ingredients']
 		current_hints_count = session.get('hints_revealed', 0)
-		visible_ingredients = original_ingredients[:current_hints_count]
+		difficulty = session.get('difficulty', 'easy')
 
+		if difficulty == 'hard':
+			visible_ingredients = original_ingredients
+		else:
+			visible_ingredients = original_ingredients[:current_hints_count]
 
 		return render_template('play.html',
 			remaining_time=remaining_time,
