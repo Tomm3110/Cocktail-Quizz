@@ -63,6 +63,21 @@
             width: 100%;
         }
 
+        /* --- NOUVEAU STYLE POUR LE MODE DIFFICILE --- */
+        .mystery-img {
+            height: 350px;
+            width: 100%;
+            background-color: #222; /* Fond sombre */
+            border: 4px dashed #555; /* Bordure pointillée */
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: #555; /* Couleur du point d'interrogation */
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
         .stats-box {
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -134,8 +149,8 @@
         <div class="collapse navbar-collapse order-lg-first" id="navbarNav">
           <div class="navbar-nav fs-5">
             <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-            <a class="nav-link active" href="#">partie en cours</a>
-            <a class="nav-link red" href="{{ url_for('ff') }}"  style="color: red;">abandonner</a>
+            <a class="nav-link active" href="#">Partie en cours</a>
+            <a class="nav-link red" href="{{ url_for('ff') }}"  style="color: red;">Abandonner</a>
           </div>
         </div>
       </div>
@@ -147,11 +162,26 @@
                 <div class="row align-items-center">
 
                     <div class="col-md-5 text-center mb-4 mb-md-0">
-                        <img src="{{ cocktail_image }}" alt="Cocktail à deviner" class="cocktail-img img-fluid">
+                        {% if session.get('difficulty') == 'easy' %}
+                            <img src="{{ cocktail_image }}" alt="Cocktail à deviner" class="cocktail-img img-fluid">
+                        {% else %}
+                            <div class="mystery-img">
+                                ❓
+                            </div>
+                            <p class="mt-2 text-muted fst-italic small">Mode Expert : Image masquée</p>
+                        {% endif %}
                     </div>
 
                     <div class="col-md-7">
                         <h1 class="text-center text-md-start">Devine le cocktail</h1>
+
+                        {% if session.get('difficulty') == 'easy' and category %}
+                            <div class="mb-3 text-center text-md-start">
+                                <span class="badge bg-warning text-dark border border-warning">
+                                    Catégorie : {{ category }}
+                                </span>
+                            </div>
+                        {% endif %}
 
                         <div class="stats-box">
                             <div>
@@ -199,7 +229,8 @@
 
     <script>
         const timerElement = document.getElementById("timer");
-        let remaining = parseInt(timerElement.dataset.remaining, 10);
+        // On sécurise le parsing au cas où data-remaining est vide
+        let remaining = parseInt(timerElement.dataset.remaining || "0", 10);
 
         function updateTimer() {
             // Calcul des minutes et secondes

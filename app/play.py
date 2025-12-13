@@ -21,6 +21,7 @@ class Play :
 			session['cocktail_name'] = cocktail["name"]
 			session['cocktail_image'] = cocktail["image"]
 			session['ingredients'] = cocktail["ingredients"]
+			session['cocktail_category'] = cocktail.get('category', 'Inconnue')
 
 			session['hints_revealed'] = 0
 
@@ -42,6 +43,7 @@ class Play :
 				session.pop('cocktail_name', None)
 				session.pop('ingredients', None)
 				session.pop('cocktail_image', None)
+				session.pop('cocktail_category', None)
                 
 				return redirect(url_for('play'))
 			
@@ -56,14 +58,18 @@ class Play :
 		
 		original_ingredients = session['ingredients']
 		current_hints_count = session.get('hints_revealed', 0)
-		visible_ingredients = original_ingredients[:current_hints_count]
+		difficulty = session.get('difficulty', 'easy')
 
+		if difficulty == 'hard':
+			visible_ingredients = original_ingredients
+		else:
+			visible_ingredients = original_ingredients[:current_hints_count]
 
-		return render_template(
-			'play.html',
+		return render_template('play.html',
 			remaining_time=remaining_time,
 			score=current_score,
 			message=message,
 			cocktail_image=session['cocktail_image'], 
-			ingredients=visible_ingredients
+			ingredients=visible_ingredients,
+			category=session.get('cocktail_category', 'Inconnue')
 		)

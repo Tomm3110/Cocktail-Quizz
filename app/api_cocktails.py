@@ -9,6 +9,7 @@ def get_random_cocktail():
 
     name = drink["strDrink"]
     image = drink["strDrinkThumb"]
+    category = drink['strCategory']
 
     # Récupérer les ingrédients (max 15)
     ingredients = []
@@ -20,5 +21,6 @@ def get_random_cocktail():
     return {
         "name": name,
         "image": image,
-        "ingredients": ingredients
+        "ingredients": ingredients,
+        "category":category
     }

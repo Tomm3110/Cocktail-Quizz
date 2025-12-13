@@ -31,12 +31,32 @@ def home():
 def play() :
     return Play.play()
 
+@app.route('/start/<level>')
+def set_difficulty(level):
+    if level not in ['easy', 'hard']:
+        level = 'easy'
+    
+    session['difficulty'] = level
+    session['score'] = 0 
+    reset_timer()
+
+    session.pop('cocktail_name', None)
+    session.pop('cocktail_image', None)
+    session.pop('ingredients', None)
+    session.pop('cocktail_category', None)
+    session.pop('hints_revealed', None)
+    
+    return redirect(url_for('play'))
+
 
 @app.route('/ff')
 def ff() :
     reset_timer()
-    session.pop("score", None)
-    session.pop("cocktail_name", None)
+    keys_to_remove = ['score', 'cocktail_name', 'cocktail_image', 'ingredients', 'cocktail_category', 'hints_revealed']
+    
+    for key in keys_to_remove:
+        session.pop(key, None)
+        
     return redirect(url_for('home'))
 
 
