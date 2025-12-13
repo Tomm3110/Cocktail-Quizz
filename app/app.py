@@ -31,6 +31,18 @@ def home():
 def play() :
     return Play.play()
 
+@app.route('/start/<level>')
+def set_difficulty(level):
+    if level not in ['easy', 'hard']:
+        level = 'easy'
+    
+    session['difficulty'] = level
+    
+    session['score'] = 0 
+    reset_timer()
+    
+    return redirect(url_for('play'))
+
 
 @app.route('/ff')
 def ff() :

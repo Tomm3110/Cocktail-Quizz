@@ -163,9 +163,19 @@
               {{data.description}}
             </p>
 
-            <a href="{{ url_for('play') }}" class="btn-start">
-              {{data.bouton}}
-            </a>
+            <div class="d-grid gap-3 col-10 mx-auto">
+              <p class="mb-2">Choisis ton défi :</p>
+              
+              <a href="{{ url_for('set_difficulty', level='easy') }}" class="btn btn-success btn-lg rounded-pill">
+                  Mode Barman (Facile) <br>
+                  <small style="font-size: 0.7em;">Avec Image & Catégorie</small>
+              </a>
+
+              <a href="{{ url_for('set_difficulty', level='hard') }}" class="btn btn-danger btn-lg rounded-pill">
+                  Mode Expert (Difficile) <br>
+                  <small style="font-size: 0.7em;">Ingrédients seulement !</small>
+              </a>
+            </div>
 
             <a href="{{ url_for('scores') }}" class="btn-start btn-score">
               Scores
