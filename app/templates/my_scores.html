@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Scores - Cocktail Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html { height: 100%; margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
+        .bg-image {
+            background-image: url("{{ url_for('static', filename='background.png') }}");
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .content {
+            color: white; max-width: 600px; width: 90%; padding: 30px;
+            margin-top: 100px; /* Un peu de marge en haut sous la nav */
+            background-color: rgba(0, 0, 0, 0.6); border-radius: 20px; backdrop-filter: blur(5px);
+        }
+        h1 { color: #f1c40f; text-transform: uppercase; margin-bottom: 30px; }
+        .score-list { list-style: none; padding: 0; }
+        .score-item {
+            background: rgba(255,255,255,0.1); margin-bottom: 10px; padding: 15px;
+            border-radius: 10px; font-size: 1.2rem; display: flex; justify-content: space-between;
+        }
+        .badge-score { background-color: #f1c40f; color: black; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    {% include 'navbar.html' ignore missing %} 
+    <div class="bg-image">
+        <div class="content">
+            <h1>Historique de {{ username }}</h1>
+
+            {% if scores %}
+                <ul class="score-list">
+                    {% for row in scores %}
+                    <li class="score-item">
+                        <span>Partie terminée</span>
+                        <span class="badge-score">{{ row['score'] }} pts</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Vous n'avez pas encore joué !</p>
+                <a href="{{ url_for('play') }}" class="btn btn-warning mt-3">Lancer une partie</a>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{{ url_for('home') }}" class="text-light">Retour à l'accueil</a>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
